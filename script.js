@@ -1,7 +1,17 @@
-// ===== NPOINT.IO CONFIG =====
-// Данные сохраняются на сервер — все посетители видят одно и то же
-const NPOINT_URL = 'https://api.npoint.io/529fc59d07c7ae3a57cc';
-const SERVER_ENABLED = true;
+// ===== FIREBASE CONFIG =====
+const firebaseConfig = {
+    apiKey: 'AIzaSyB8jARNZNyekakuZ3i-gNez9q7oXTNskzs',
+    databaseURL: 'https://galaxy-ring-project-default-rtdb.europe-west1.firebasedatabase.app'
+};
+const FIREBASE_ENABLED = !firebaseConfig.apiKey.includes('ВАШ') && !firebaseConfig.databaseURL.includes('ВАШ');
+
+// ===== FIREBASE INIT =====
+import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
+import { getDatabase, ref, get, set } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js';
+
+const app = initializeApp(firebaseConfig);
+const db  = getDatabase(app);
+const cmsRef = ref(db, 'cms');
 
 // ===== I18N =====
 let currentLang = localStorage.getItem('tgrp-lang') || 'en';
@@ -9,7 +19,7 @@ let i18nData = {};
 
 async function loadTranslations(lang) {
     try {
-        const response = await fetch(`i18n/${lang}.json`);
+        const response = await fetch(`${lang}.json`);
         if (!response.ok) throw new Error('Failed to load translations');
         i18nData[lang] = await response.json();
     } catch (e) {
@@ -275,31 +285,29 @@ if (cmsSyncRaven) {
     cmsSyncRaven.addEventListener('click', syncRavenColonial);
 }
 
-// ===== NPOINT.IO LOAD / SAVE =====
+// ===== FIREBASE LOAD / SAVE =====
 
 async function loadFromServer() {
-    if (!SERVER_ENABLED) return null;
+    if (!FIREBASE_ENABLED) return null;
     try {
-        const res = await fetch(NPOINT_URL);
-        if (!res.ok) throw new Error('Server read failed');
-        return await res.json();
+        const snapshot = await get(cmsRef);
+        if (snapshot.exists()) {
+            return snapshot.val();
+        }
+        return null;
     } catch (e) {
-        console.error('Server load error:', e);
+        console.error('Firebase load error:', e);
         return null;
     }
 }
 
 async function saveToServer(data) {
-    if (!SERVER_ENABLED) return false;
+    if (!FIREBASE_ENABLED) return false;
     try {
-        const res = await fetch(NPOINT_URL, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(data)
-        });
-        return res.ok;
+        await set(cmsRef, data);
+        return true;
     } catch (e) {
-        console.error('Server save error:', e);
+        console.error('Firebase save error:', e);
         return false;
     }
 }
@@ -401,8 +409,8 @@ function applyCmsData(data) {
 async function loadCmsData() {
     let data = null;
 
-    // 1. Try server first
-    if (SERVER_ENABLED) {
+    // 1. Try Firebase first
+    if (FIREBASE_ENABLED) {
         data = await loadFromServer();
     }
 
@@ -440,14 +448,14 @@ cmsSave.addEventListener('click', async () => {
     // Save to localStorage (always, as fallback)
     localStorage.setItem('tgrp-cms-data', JSON.stringify(data));
 
-    // Save to npoint.io
+    // Save to Firebase
     let serverOk = false;
-    if (SERVER_ENABLED) {
+    if (FIREBASE_ENABLED) {
         serverOk = await saveToServer(data);
     }
 
     // Visual feedback
-    cmsSave.textContent = serverOk ? 'SAVED!' : (SERVER_ENABLED ? 'SAVED (local)' : 'SAVED!');
+    cmsSave.textContent = serverOk ? 'SAVED!' : (FIREBASE_ENABLED ? 'SAVED (local)' : 'SAVED!');
     cmsSave.style.borderColor = 'var(--ed-green)';
     setTimeout(() => {
         cmsSave.textContent = 'Save Changes';
@@ -458,7 +466,7 @@ cmsSave.addEventListener('click', async () => {
 cmsReset.addEventListener('click', async () => {
     if (confirm('Reset all content to default? This cannot be undone.')) {
         localStorage.removeItem('tgrp-cms-data');
-        if (SERVER_ENABLED) {
+        if (FIREBASE_ENABLED) {
             await saveToServer({});
         }
         location.reload();
