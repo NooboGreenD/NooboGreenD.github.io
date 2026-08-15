@@ -53,9 +53,15 @@ body::after {
     height: 60px; display: flex; align-items: center; justify-content: space-between;
 }
 .nav-logo {
-    font-family: 'Orbitron', sans-serif; font-size: 1.1rem; font-weight: 700;
-    color: var(--ed-cyan); text-transform: uppercase; letter-spacing: 3px;
-    text-shadow: 0 0 10px rgba(0, 212, 255, 0.5);
+    display: flex; align-items: center; text-decoration: none;
+}
+.nav-logo-img {
+    height: 40px; width: auto;
+    filter: drop-shadow(0 0 8px rgba(0, 212, 255, 0.4));
+    transition: filter 0.3s;
+}
+.nav-logo:hover .nav-logo-img {
+    filter: drop-shadow(0 0 12px rgba(0, 212, 255, 0.7));
 }
 .nav-links { display: flex; gap: 2rem; align-items: center; }
 .nav-links a {
@@ -90,6 +96,15 @@ body::after {
     text-align: center; z-index: 1; padding: 2rem;
 }
 .hero-content { position: relative; z-index: 2; }
+.hero-logo {
+    width: 180px; height: auto; margin-bottom: 1.5rem;
+    filter: drop-shadow(0 0 20px rgba(0, 212, 255, 0.3));
+    animation: logo-float 4s ease-in-out infinite;
+}
+@keyframes logo-float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-8px); }
+}
 .hero-badge {
     display: inline-block; border: 1px solid var(--ed-cyan); padding: 0.5rem 1.5rem;
     font-family: 'Share Tech Mono', monospace; font-size: 0.8rem; color: var(--ed-cyan);
@@ -224,6 +239,14 @@ body::after {
     background: var(--ed-green); border-color: var(--ed-green);
     box-shadow: 0 0 15px rgba(0,255,102,0.6);
 }
+.route-item-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 0.3rem;
+}
 .route-name { font-family: 'Orbitron', sans-serif; font-size: 1.2rem; color: var(--ed-cyan); margin-bottom: 0.3rem; }
 .route-desc { color: var(--text-secondary); font-size: 0.95rem; }
 .route-status {
@@ -237,6 +260,32 @@ body::after {
 @keyframes pulse-border {
     0%, 100% { box-shadow: 0 0 5px rgba(255,107,0,0.2); }
     50% { box-shadow: 0 0 15px rgba(255,107,0,0.4); }
+}
+
+/* Raven Colonial link */
+.raven-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    color: var(--ed-cyan);
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.7rem;
+    text-decoration: none;
+    border: 1px solid var(--hud-line);
+    padding: 0.25rem 0.6rem;
+    transition: all 0.3s;
+    white-space: nowrap;
+}
+.raven-link:hover {
+    border-color: var(--ed-cyan);
+    background: rgba(0, 212, 255, 0.05);
+    box-shadow: 0 0 10px rgba(0, 212, 255, 0.2);
+    text-shadow: 0 0 5px rgba(0, 212, 255, 0.5);
+}
+.raven-link::after {
+    content: '↗';
+    font-size: 0.65rem;
+    opacity: 0.7;
 }
 
 /* Route Progress Bar */
@@ -454,48 +503,8 @@ body::after {
     .stat-value { font-size: 1.8rem; }
     .cms-panel, .cms-login-panel { width: 100%; right: -100%; }
     .section { padding: 4rem 1.5rem; }
-}
-/* Raven Colonial link in route items */
-.route-item-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    gap: 0.5rem;
-    margin-bottom: 0.3rem;
-}
-.raven-link {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.3rem;
-    color: var(--ed-cyan);
-    font-family: 'Share Tech Mono', monospace;
-    font-size: 0.7rem;
-    text-decoration: none;
-    border: 1px solid var(--hud-line);
-    padding: 0.25rem 0.6rem;
-    transition: all 0.3s;
-    white-space: nowrap;
-}
-.raven-link:hover {
-    border-color: var(--ed-cyan);
-    background: rgba(0, 212, 255, 0.05);
-    box-shadow: 0 0 10px rgba(0, 212, 255, 0.2);
-    text-shadow: 0 0 5px rgba(0, 212, 255, 0.5);
-}
-.raven-link::after {
-    content: '↗';
-    font-size: 0.65rem;
-    opacity: 0.7;
-}
-
-/* Responsive: stack on mobile */
-@media (max-width: 768px) {
-    .route-item-header {
-        flex-direction: column;
-        align-items: flex-start;
-    }
-    .raven-link {
-        margin-left: 0;
-    }
+    .route-item-header { flex-direction: column; align-items: flex-start; }
+    .raven-link { margin-left: 0; }
+    .hero-logo { width: 140px; }
+    .nav-logo-img { height: 32px; }
 }
