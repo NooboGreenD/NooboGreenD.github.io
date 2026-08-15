@@ -3,7 +3,7 @@
 const JSONBIN_BIN_ID = '6a80b11ef5f4af5e291ac7b3';
 const JSONBIN_READ_KEY = '$2a$10$e1e/z.MYrr8OngoeIsZkrejZvTTvez/JGKLyaIxXcob8plRIZwbOu';
 const JSONBIN_WRITE_KEY = '$2a$10$z1KTZwzRmiRRh6hYfbM3K.bKxFHaG9qnSsqbX6VJFz.x9ZNclCi7y';
-const JSONBIN_ENABLED = JSONBIN_BIN_ID !== '6a80b11ef5f4af5e291ac7b3';
+const JSONBIN_ENABLED = JSONBIN_BIN_ID;
 
 // ===== I18N =====
 let currentLang = localStorage.getItem('tgrp-lang') || 'en';
