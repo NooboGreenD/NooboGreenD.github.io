@@ -31,6 +31,29 @@ function hideStatus(delay = 3000) {
     setTimeout(() => { el.style.opacity = '0'; }, delay);
 }
 
+// ─── Key encoding for Firebase (dots are illegal in RTDB keys) ───────
+function encodeKeys(obj) {
+    const out = {};
+    for (const key in obj) {
+        if (Object.prototype.hasOwnProperty.call(obj, key)) {
+            const safeKey = key.replace(/\./g, '__dot__');
+            out[safeKey] = obj[key];
+        }
+    }
+    return out;
+}
+
+function decodeKeys(obj) {
+    const out = {};
+    for (const key in obj) {
+        if (Object.prototype.hasOwnProperty.call(obj, key)) {
+            const realKey = key.replace(/__dot__/g, '.');
+            out[realKey] = obj[key];
+        }
+    }
+    return out;
+}
+
 // ─── Initialization ──────────────────────────────────────────────────
 export function initFirebase() {
     try {
@@ -78,7 +101,7 @@ export async function loadFromServer() {
     try {
         const snapshot = await get(cmsRef);
         if (snapshot.exists()) {
-            const data = snapshot.val();
+            const data = decodeKeys(snapshot.val());
             console.log('[Firebase] Data loaded from server:', Object.keys(data).length, 'keys');
             return data;
         }
@@ -98,7 +121,7 @@ export async function saveToServer(data) {
         return false;
     }
     try {
-        await set(cmsRef, data);
+        await set(cmsRef, encodeKeys(data));
         console.log('[Firebase] Data saved to server');
         setStatus('ok', 'Firebase: Saved');
         hideStatus(2000);
@@ -114,7 +137,7 @@ export async function saveToServer(data) {
 export function subscribeToChanges(callback) {
     if (!isFirebaseReady()) return;
     const unsub = onValue(cmsRef, (snap) => {
-        if (snap.exists()) callback(snap.val());
+        if (snap.exists()) callback(decodeKeys(snap.val()));
     });
     listeners.push({ ref: cmsRef, unsub });
 }
