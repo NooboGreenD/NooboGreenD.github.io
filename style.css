@@ -455,3 +455,47 @@ body::after {
     .cms-panel, .cms-login-panel { width: 100%; right: -100%; }
     .section { padding: 4rem 1.5rem; }
 }
+/* Raven Colonial link in route items */
+.route-item-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 0.3rem;
+}
+.raven-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    color: var(--ed-cyan);
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.7rem;
+    text-decoration: none;
+    border: 1px solid var(--hud-line);
+    padding: 0.25rem 0.6rem;
+    transition: all 0.3s;
+    white-space: nowrap;
+}
+.raven-link:hover {
+    border-color: var(--ed-cyan);
+    background: rgba(0, 212, 255, 0.05);
+    box-shadow: 0 0 10px rgba(0, 212, 255, 0.2);
+    text-shadow: 0 0 5px rgba(0, 212, 255, 0.5);
+}
+.raven-link::after {
+    content: '↗';
+    font-size: 0.65rem;
+    opacity: 0.7;
+}
+
+/* Responsive: stack on mobile */
+@media (max-width: 768px) {
+    .route-item-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    .raven-link {
+        margin-left: 0;
+    }
+}

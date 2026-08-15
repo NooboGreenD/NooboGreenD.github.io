@@ -33,7 +33,6 @@ async function setLanguage(lang) {
     const langData = i18nData[lang] || i18nData['en'] || {};
 
     document.querySelectorAll('[data-i18n]').forEach(el => {
-        // Skip elements inside CMS panel
         if (el.closest('.cms-panel')) return;
 
         const key = el.dataset.i18n;
@@ -127,6 +126,7 @@ const cmsClose = document.getElementById('cmsClose');
 const cmsSave = document.getElementById('cmsSave');
 const cmsReset = document.getElementById('cmsReset');
 const cmsExport = document.getElementById('cmsExport');
+const cmsSyncRaven = document.getElementById('cmsSyncRaven');
 
 let cmsOpen = false;
 let cmsAuthenticated = sessionStorage.getItem('tgrp-cms-auth') === 'true';
@@ -172,6 +172,104 @@ cmsOverlay.addEventListener('click', closeCms);
 cmsLoginBtn.addEventListener('click', authenticate);
 cmsPassword.addEventListener('keydown', e => { if (e.key === 'Enter') authenticate(); });
 
+// ===== RAVEN COLONIAL SYNC =====
+const RAVEN_API_BASE = 'https://ravencolonial100-awcbdvabgze4c5cq.canadacentral-01.azurewebsites.net';
+
+async function fetchSystemProjects(systemName) {
+    const response = await fetch(`${RAVEN_API_BASE}/api/System/${encodeURIComponent(systemName)}/all`);
+    if (!response.ok) return null;
+    return await response.json();
+}
+
+async function fetchProjectStats(buildId) {
+    const response = await fetch(`${RAVEN_API_BASE}/api/project/${buildId}/stats`);
+    if (!response.ok) return null;
+    return await response.json();
+}
+
+async function syncRavenColonial() {
+    if (!cmsSyncRaven) return;
+    cmsSyncRaven.textContent = 'Syncing...';
+    cmsSyncRaven.style.borderColor = 'var(--ed-yellow)';
+
+    for (let i = 1; i <= 18; i++) {
+        const ravenInput = document.querySelector(`.cms-panel [data-cms-key="route.r${i}.raven"]`);
+        if (!ravenInput || !ravenInput.value.trim()) continue;
+
+        let systemName = ravenInput.value.trim();
+        const sysMatch = systemName.match(/#sys=([^&]+)/);
+        if (sysMatch) systemName = decodeURIComponent(sysMatch[1]);
+        systemName = systemName.replace(/\/$/, '');
+
+        try {
+            const projects = await fetchSystemProjects(systemName);
+            if (!Array.isArray(projects) || projects.length === 0) continue;
+
+            let totalNeeded = 0;
+            let totalCompleted = 0;
+            let allComplete = true;
+
+            for (const project of projects) {
+                if (project.complete) {
+                    totalCompleted += project.maxNeed || 0;
+                    totalNeeded += project.maxNeed || 0;
+                } else {
+                    allComplete = false;
+                    totalNeeded += project.maxNeed || 0;
+                    try {
+                        const stats = await fetchProjectStats(project.buildId);
+                        if (stats) {
+                            totalCompleted += stats.totalCargo || 0;
+                        }
+                    } catch (e) {
+                        // ignore
+                    }
+                }
+            }
+
+            const progressPercent = totalNeeded > 0 ? Math.round((totalCompleted / totalNeeded) * 100) : 0;
+            const progressStr = progressPercent + '%';
+
+            const progressValInput = document.querySelector(`.cms-panel [data-cms-key="route.r${i}.progressVal"]`);
+            const statusSelect = document.querySelector(`.cms-panel [data-cms-key="route.r${i}.status"]`);
+
+            if (progressValInput) progressValInput.value = progressStr;
+
+            if (statusSelect) {
+                if (allComplete && projects.length > 0) {
+                    statusSelect.value = 'completed';
+                } else if (progressPercent > 0) {
+                    statusSelect.value = 'active';
+                }
+            }
+
+            const bar = document.querySelector(`#route [data-cms-key="route.r${i}.progress"]`);
+            if (bar) bar.style.width = progressStr;
+
+            const valDisplay = document.querySelector(`#route [data-cms-key="route.r${i}.progressVal"]`);
+            if (valDisplay) valDisplay.textContent = progressStr;
+
+            if (statusSelect) {
+                applyRouteStatus(i, statusSelect.value);
+            }
+
+        } catch (e) {
+            console.error(`Failed to sync route ${i}:`, e);
+        }
+    }
+
+    cmsSyncRaven.textContent = 'Synced!';
+    cmsSyncRaven.style.borderColor = 'var(--ed-green)';
+    setTimeout(() => {
+        cmsSyncRaven.textContent = 'Sync from Raven Colonial';
+        cmsSyncRaven.style.borderColor = 'var(--ed-cyan)';
+    }, 2000);
+}
+
+if (cmsSyncRaven) {
+    cmsSyncRaven.addEventListener('click', syncRavenColonial);
+}
+
 // ===== CMS LOAD / SAVE / EXPORT =====
 function applyRouteStatus(routeIndex, status) {
     const routeItems = document.querySelectorAll('#route .route-item');
@@ -194,6 +292,13 @@ function applyRouteStatus(routeIndex, status) {
 function applyLink(key, url) {
     const linkEl = document.querySelector(`[data-cms-key="${key}"]`);
     if (linkEl && linkEl.tagName === 'A') {
+        linkEl.href = url;
+    }
+}
+
+function applyRavenLink(key, url) {
+    const linkEl = document.querySelector(`[data-cms-key="${key}"]`);
+    if (linkEl && linkEl.classList.contains('raven-link')) {
         linkEl.href = url;
     }
 }
@@ -248,6 +353,11 @@ function loadCmsData() {
         ['link.discord', 'link.edsm', 'link.inara'].forEach(linkKey => {
             if (data[linkKey]) applyLink(linkKey, data[linkKey]);
         });
+        // Apply Raven Colonial links
+        for (let i = 1; i <= 18; i++) {
+            const ravenKey = `route.r${i}.raven`;
+            if (data[ravenKey]) applyRavenLink(ravenKey, data[ravenKey]);
+        }
     } catch(e) { console.error('CMS load error', e); }
 }
 
@@ -263,7 +373,7 @@ cmsSave.addEventListener('click', () => {
             else displayEl.textContent = input.value;
         }
     });
-    // Save data-cms-key fields (stats, progress values, statuses, links)
+    // Save data-cms-key fields (stats, progress values, statuses, links, raven)
     document.querySelectorAll('.cms-panel [data-cms-key]').forEach(input => {
         const key = input.dataset.cmsKey;
         data[key] = input.value;
@@ -298,6 +408,11 @@ cmsSave.addEventListener('click', () => {
     ['link.discord', 'link.edsm', 'link.inara'].forEach(linkKey => {
         if (data[linkKey]) applyLink(linkKey, data[linkKey]);
     });
+    // Apply Raven Colonial links
+    for (let i = 1; i <= 18; i++) {
+        const ravenKey = `route.r${i}.raven`;
+        if (data[ravenKey]) applyRavenLink(ravenKey, data[ravenKey]);
+    }
 
     localStorage.setItem('tgrp-cms-data', JSON.stringify(data));
     cmsSave.textContent = 'SAVED!';

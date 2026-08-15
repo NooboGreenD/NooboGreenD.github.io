@@ -110,7 +110,9 @@
     "r18": {
       "name": "Aquila's Halo Return",
       "desc": "Letztes Segment, das den Ring zurück zur Blase durch Aquila's Halo schließt."
-    }
+    },
+    "ravenColonial": "Raven Colonial",
+    "syncRaven": "Mit Raven Colonial synchronisieren"
   },
   "join": {
     "title": "Der Expedition beitreten",

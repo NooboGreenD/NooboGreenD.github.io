@@ -110,7 +110,9 @@
     "r18": {
       "name": "Aquila's Halo Return",
       "desc": "Final segment closing the ring back toward the Bubble through Aquila's Halo."
-    }
+    },
+    "ravenColonial": "Raven Colonial",
+    "syncRaven": "Sync from Raven Colonial"
   },
   "join": {
     "title": "Join The Expedition",
