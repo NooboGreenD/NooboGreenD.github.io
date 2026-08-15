@@ -1,3 +1,10 @@
+// ===== JSONBIN.IO CONFIG =====
+// Замените на свои значения после регистрации на https://jsonbin.io
+const JSONBIN_BIN_ID = '6a80b11ef5f4af5e291ac7b3';
+const JSONBIN_READ_KEY = '$2a$10$e1e/z.MYrr8OngoeIsZkrejZvTTvez/JGKLyaIxXcob8plRIZwbOu';
+const JSONBIN_WRITE_KEY = '$2a$10$z1KTZwzRmiRRh6hYfbM3K.bKxFHaG9qnSsqbX6VJFz.x9ZNclCi7y';
+const JSONBIN_ENABLED = JSONBIN_BIN_ID !== '6a80b11ef5f4af5e291ac7b3';
+
 // ===== I18N =====
 let currentLang = localStorage.getItem('tgrp-lang') || 'en';
 let i18nData = {};
@@ -270,7 +277,43 @@ if (cmsSyncRaven) {
     cmsSyncRaven.addEventListener('click', syncRavenColonial);
 }
 
-// ===== CMS LOAD / SAVE / EXPORT =====
+// ===== JSONBIN.IO LOAD / SAVE =====
+
+async function loadFromJsonBin() {
+    if (!JSONBIN_ENABLED) return null;
+    try {
+        const res = await fetch(`https://api.jsonbin.io/v3/b/${JSONBIN_BIN_ID}/latest`, {
+            headers: { 'X-Access-Key': JSONBIN_READ_KEY }
+        });
+        if (!res.ok) throw new Error('JSONBin read failed');
+        const json = await res.json();
+        return json.record || {};
+    } catch (e) {
+        console.error('JSONBin load error:', e);
+        return null;
+    }
+}
+
+async function saveToJsonBin(data) {
+    if (!JSONBIN_ENABLED) return false;
+    try {
+        const res = await fetch(`https://api.jsonbin.io/v3/b/${JSONBIN_BIN_ID}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-Master-Key': JSONBIN_WRITE_KEY
+            },
+            body: JSON.stringify(data)
+        });
+        return res.ok;
+    } catch (e) {
+        console.error('JSONBin save error:', e);
+        return false;
+    }
+}
+
+// ===== CMS APPLY DATA (shared by local and server) =====
+
 function applyRouteStatus(routeIndex, status) {
     const routeItems = document.querySelectorAll('#route .route-item');
     if (!routeItems[routeIndex - 1]) return;
@@ -296,89 +339,37 @@ function applyLink(key, url) {
     }
 }
 
-function applyRavenLink(key, url) {
-    const linkEl = document.querySelector(`[data-cms-key="${key}"]`);
-    if (linkEl && linkEl.classList.contains('raven-link')) {
-        linkEl.href = url;
-    }
-}
+function applyCmsData(data) {
+    if (!data || Object.keys(data).length === 0) return;
 
-function loadCmsData() {
-    const saved = localStorage.getItem('tgrp-cms-data');
-    if (!saved) return;
-    try {
-        const data = JSON.parse(saved);
-        // Text inputs (data-cms-input)
-        Object.keys(data).forEach(key => {
-            const input = document.querySelector(`[data-cms-input="${key}"]`);
-            if (input) input.value = data[key];
-            const displayEl = document.querySelector(`[data-i18n="${key}"]`);
-            if (displayEl && !displayEl.closest('.cms-panel')) {
-                if (displayEl.tagName === 'INPUT' || displayEl.tagName === 'TEXTAREA') displayEl.value = data[key];
-                else displayEl.textContent = data[key];
-            }
-        });
-        // Stats, progress values, statuses, links (data-cms-key)
-        Object.keys(data).forEach(key => {
-            const el = document.querySelector(`[data-cms-key="${key}"]`);
-            if (el && !el.closest('.cms-panel')) {
-                if (el.tagName === 'A') {
-                    el.href = data[key];
-                } else {
-                    el.textContent = data[key];
-                }
-            }
-            const cmsEl = document.querySelector(`.cms-panel [data-cms-key="${key}"]`);
-            if (cmsEl) {
-                cmsEl.value = data[key];
-            }
-        });
-        // Sync progress bar widths
-        for (let i = 1; i <= 18; i++) {
-            const valKey = `route.r${i}.progressVal`;
-            const barKey = `route.r${i}.progress`;
-            const bar = document.querySelector(`[data-cms-key="${barKey}"]`);
-            if (bar && data[valKey]) {
-                bar.style.width = data[valKey];
-            }
-        }
-        // Apply route statuses
-        for (let i = 1; i <= 18; i++) {
-            const statusKey = `route.r${i}.status`;
-            if (data[statusKey]) {
-                applyRouteStatus(i, data[statusKey]);
-            }
-        }
-        // Apply links
-        ['link.discord', 'link.edsm', 'link.inara'].forEach(linkKey => {
-            if (data[linkKey]) applyLink(linkKey, data[linkKey]);
-        });
-        // Apply Raven Colonial links
-        for (let i = 1; i <= 18; i++) {
-            const ravenKey = `route.r${i}.raven`;
-            if (data[ravenKey]) applyRavenLink(ravenKey, data[ravenKey]);
-        }
-    } catch(e) { console.error('CMS load error', e); }
-}
-
-cmsSave.addEventListener('click', () => {
-    const data = {};
-    // Save data-cms-input fields
-    document.querySelectorAll('[data-cms-input]').forEach(input => {
-        const key = input.dataset.cmsInput;
-        data[key] = input.value;
+    // Text inputs (data-cms-input)
+    Object.keys(data).forEach(key => {
+        const input = document.querySelector(`[data-cms-input="${key}"]`);
+        if (input) input.value = data[key];
         const displayEl = document.querySelector(`[data-i18n="${key}"]`);
         if (displayEl && !displayEl.closest('.cms-panel')) {
-            if (displayEl.tagName === 'INPUT' || displayEl.tagName === 'TEXTAREA') displayEl.value = input.value;
-            else displayEl.textContent = input.value;
+            if (displayEl.tagName === 'INPUT' || displayEl.tagName === 'TEXTAREA') displayEl.value = data[key];
+            else displayEl.textContent = data[key];
         }
     });
-    // Save data-cms-key fields (stats, progress values, statuses, links, raven)
-    document.querySelectorAll('.cms-panel [data-cms-key]').forEach(input => {
-        const key = input.dataset.cmsKey;
-        data[key] = input.value;
+
+    // Stats, progress values, statuses, links (data-cms-key)
+    Object.keys(data).forEach(key => {
+        const el = document.querySelector(`[data-cms-key="${key}"]`);
+        if (el && !el.closest('.cms-panel')) {
+            if (el.tagName === 'A') {
+                el.href = data[key];
+            } else {
+                el.textContent = data[key];
+            }
+        }
+        const cmsEl = document.querySelector(`.cms-panel [data-cms-key="${key}"]`);
+        if (cmsEl) {
+            cmsEl.value = data[key];
+        }
     });
-    // Sync progress bar widths from saved values
+
+    // Sync progress bar widths
     for (let i = 1; i <= 18; i++) {
         const valKey = `route.r${i}.progressVal`;
         const barKey = `route.r${i}.progress`;
@@ -387,16 +378,7 @@ cmsSave.addEventListener('click', () => {
             bar.style.width = data[valKey];
         }
     }
-    // Sync stat display elements
-    document.querySelectorAll('[data-cms-key]').forEach(el => {
-        if (!el.closest('.cms-panel')) {
-            const key = el.dataset.cmsKey;
-            if (data[key]) {
-                if (el.tagName === 'A') el.href = data[key];
-                else el.textContent = data[key];
-            }
-        }
-    });
+
     // Apply route statuses
     for (let i = 1; i <= 18; i++) {
         const statusKey = `route.r${i}.status`;
@@ -404,25 +386,89 @@ cmsSave.addEventListener('click', () => {
             applyRouteStatus(i, data[statusKey]);
         }
     }
-    // Apply links
+
+    // Apply external links
     ['link.discord', 'link.edsm', 'link.inara'].forEach(linkKey => {
         if (data[linkKey]) applyLink(linkKey, data[linkKey]);
     });
+
     // Apply Raven Colonial links
     for (let i = 1; i <= 18; i++) {
         const ravenKey = `route.r${i}.raven`;
-        if (data[ravenKey]) applyRavenLink(ravenKey, data[ravenKey]);
+        if (data[ravenKey]) {
+            const el = document.querySelector(`[data-cms-key="${ravenKey}"]`);
+            if (el && el.classList.contains('raven-link')) {
+                el.href = data[ravenKey];
+            }
+        }
+    }
+}
+
+// ===== CMS LOAD =====
+
+async function loadCmsData() {
+    let data = null;
+
+    // 1. Try server first
+    if (JSONBIN_ENABLED) {
+        data = await loadFromJsonBin();
     }
 
+    // 2. Fallback to localStorage
+    if (!data) {
+        const saved = localStorage.getItem('tgrp-cms-data');
+        if (saved) {
+            try { data = JSON.parse(saved); } catch (e) {}
+        }
+    }
+
+    if (data) {
+        applyCmsData(data);
+    }
+}
+
+// ===== CMS SAVE =====
+
+cmsSave.addEventListener('click', async () => {
+    const data = {};
+
+    // Collect data-cms-input fields
+    document.querySelectorAll('[data-cms-input]').forEach(input => {
+        data[input.dataset.cmsInput] = input.value;
+    });
+
+    // Collect data-cms-key fields
+    document.querySelectorAll('.cms-panel [data-cms-key]').forEach(input => {
+        data[input.dataset.cmsKey] = input.value;
+    });
+
+    // Apply to page immediately
+    applyCmsData(data);
+
+    // Save to localStorage (always, as fallback)
     localStorage.setItem('tgrp-cms-data', JSON.stringify(data));
-    cmsSave.textContent = 'SAVED!';
+
+    // Save to JSONBin.io
+    let serverOk = false;
+    if (JSONBIN_ENABLED) {
+        serverOk = await saveToJsonBin(data);
+    }
+
+    // Visual feedback
+    cmsSave.textContent = serverOk ? 'SAVED!' : (JSONBIN_ENABLED ? 'SAVED (local)' : 'SAVED!');
     cmsSave.style.borderColor = 'var(--ed-green)';
-    setTimeout(() => { cmsSave.textContent = 'Save Changes'; cmsSave.style.borderColor = ''; }, 1500);
+    setTimeout(() => {
+        cmsSave.textContent = 'Save Changes';
+        cmsSave.style.borderColor = '';
+    }, 1500);
 });
 
-cmsReset.addEventListener('click', () => {
+cmsReset.addEventListener('click', async () => {
     if (confirm('Reset all content to default? This cannot be undone.')) {
         localStorage.removeItem('tgrp-cms-data');
+        if (JSONBIN_ENABLED) {
+            await saveToJsonBin({});
+        }
         location.reload();
     }
 });
@@ -455,7 +501,7 @@ window.addEventListener('scroll', () => {
 async function init() {
     await loadTranslations(currentLang);
     await setLanguage(currentLang);
-    loadCmsData();
+    await loadCmsData();
 }
 
 init();
