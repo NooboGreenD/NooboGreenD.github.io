@@ -1,0 +1,157 @@
+{
+  "nav": {
+    "about": "Über",
+    "route": "Route",
+    "join": "Beitreten",
+    "faq": "FAQ"
+  },
+  "hero": {
+    "badge": "Elite Dangerous Community Projekt",
+    "title1": "Das Galaxis",
+    "title2": "Ring Projekt",
+    "subtitle": "Eine großangelegte Kolonisierungsinitiative, um einen Ring bewohnter Systeme durch die Milchstraße zu etablieren, die die Blase mit den fernsten Grenzen verbindet.",
+    "cta": "Mission beitreten"
+  },
+  "stats": {
+    "systems": "Systeme",
+    "cmdrs": "CMDRs",
+    "ly": "Lichtjahre",
+    "sectors": "Sektoren"
+  },
+  "about": {
+    "title": "Missionsbesprechung",
+    "subtitle": "Das Galaxis-Ring-Projekt zielt darauf ab, eine kontinuierliche Kette kolonisierter Systeme zu schaffen, die einen Ring um das galaktische Zentrum bilden.",
+    "p1": "Kommandanten, das Galaxis-Ring-Projekt ruft alle Entdecker, Miner, Händler und Kämpfer auf, an einem der ehrgeizigsten Kolonisierungsvorhaben der Menschheitsgeschichte teilzunehmen.",
+    "p2": "Unser Ziel ist es, Außenposten und Siedlungen in einem kontinuierlichen Ringmuster zu errichten, sichere Korridore durch die Leere zu schaffen und entfernte Regionen mit der bewohnten Blase zu verbinden.",
+    "feature1": "Erforsche unbekannte Systeme und beanspruche neue Welten",
+    "feature2": "Errichte Bergbauoperationen und Versorgungsketten",
+    "feature3": "Verteide Expansionszonen vor feindlichen Bedrohungen",
+    "feature4": "Kartiere optimale Routen durch gefährliche Sektoren",
+    "feature5": "Dokumentiere Anomalien und wissenschaftliche Entdeckungen",
+    "vizCaption": "Galaktisches Ring-Kolonisierungsmuster"
+  },
+  "route": {
+    "title": "Expansionsroute",
+    "subtitle": "Aktueller Fortschritt der Galaxis-Ring-Expansion über die galaktische Ebene.",
+    "progress": "Fortschritt",
+    "status": {
+      "active": "AKTIV",
+      "completed": "ABGESCHLOSSEN",
+      "planned": "GEPLANT"
+    },
+    "r1": {
+      "name": "Sol → Colonia Corridor",
+      "desc": "Primäre Expansionsachse, die die Blase mit der Colonia-Region verbindet. 22.000 LJ etablierter Außenposten."
+    },
+    "r2": {
+      "name": "Colonia → Sagittarius A* Branch",
+      "desc": "Tiefkern-Expedition zur Errichtung von Wegpunkten in Richtung des galaktischen Zentrums."
+    },
+    "r3": {
+      "name": "Eastern Rim Arc",
+      "desc": "Geplante Expansion entlang des östlichen galaktischen Randes zu den äußeren Armen."
+    },
+    "r4": {
+      "name": "Western Frontier Loop",
+      "desc": "Zukünftige Initiative zum Abschluss des Rings durch die westlichen Grenzsektoren."
+    },
+    "r5": {
+      "name": "Perseus Arm Connection",
+      "desc": "Langfristiges Ziel, den Ring durch die Anomalien des Perseus-Arms zu führen."
+    },
+    "r6": {
+      "name": "Outer Orion Spur Link",
+      "desc": "Verbindung der Perseus-Brücke mit dem kolonialen Netzwerk des Äußeren Orion-Sporns."
+    },
+    "r7": {
+      "name": "Formidine Rift Crossing",
+      "desc": "Hochrisikokorridor durch die verlassenen Sektoren der Formidine-Rift."
+    },
+    "r8": {
+      "name": "Hawking's Gap Traverse",
+      "desc": "Navigation durch die dichten Sternenfelder und Nebel der Hawking's Gap-Region."
+    },
+    "r9": {
+      "name": "Dryman's Point Supply Line",
+      "desc": "Logistisches Rückgrat zur Sicherstellung der Versorgung der östlichen Grenzaußenposten."
+    },
+    "r10": {
+      "name": "Sanguineous Rim Outposts",
+      "desc": "Errichtung von Stützpunkten entlang der blutroten Nebel des Sanguineous Rim."
+    },
+    "r11": {
+      "name": "Achilles' Altar Approach",
+      "desc": "Taktische Expansion in Richtung der militarisierten Sektoren nahe Achilles' Altar."
+    },
+    "r12": {
+      "name": "Xibalba Void Stations",
+      "desc": "Tiefraum-Tank- und Reparaturstationen in der dünn besiedelten Xibalba-Region."
+    },
+    "r13": {
+      "name": "Kepler's Crest Arc",
+      "desc": "Wissenschaftliche Außenpostenkette entlang des mineralreichen Kepler's Crest."
+    },
+    "r14": {
+      "name": "Elysian Shore Colonies",
+      "desc": "Terraforming- und Siedlungsinitiative auf den Gartenwelten der Elysian Shore."
+    },
+    "r15": {
+      "name": "Temple Sector Network",
+      "desc": "Religiöse und Forschungsaußenposten im rätselhaften Temple Sector."
+    },
+    "r16": {
+      "name": "Vulcan Gate Defense Line",
+      "desc": "Befestigter Korridor zum Schutz des westlichen Anflugs vor Piraten- und Thargoid-Überfällen."
+    },
+    "r17": {
+      "name": "Errant Marches Relay",
+      "desc": "Kommunikations- und Navigationsrelais-Kette durch die chaotischen Errant Marches."
+    },
+    "r18": {
+      "name": "Aquila's Halo Return",
+      "desc": "Letztes Segment, das den Ring zurück zur Blase durch Aquila's Halo schließt."
+    }
+  },
+  "join": {
+    "title": "Der Expedition beitreten",
+    "subtitle": "Teil des Galaxis-Ring-Projekts zu werden ist einfach. Folge diesen Schritten, um dich anzuwerben.",
+    "step1": {
+      "title": "Registrieren",
+      "desc": "Tritt unserem Discord bei und registriere deinen CMDR-Namen in der Projektdatenbank."
+    },
+    "step2": {
+      "title": "Zuweisung erhalten",
+      "desc": "Erhalte deinen zugewiesenen Sektor und Routenauftrag vom Kommando."
+    },
+    "step3": {
+      "title": "Erkunden",
+      "desc": "Reise zu deinen zugewiesenen Systemen, scanne und bereite die Kolonisierung vor."
+    },
+    "step4": {
+      "title": "Kolonisieren",
+      "desc": "Errichte Oberflächenbasen, etabliere Versorgungslinien und beanspruche die Leere."
+    },
+    "cta": "Jetzt anwerben"
+  },
+  "faq": {
+    "title": "Kommando-Datenbank",
+    "subtitle": "Häufig gestellte Fragen von Piloten, die erwägen, der Expedition beizutreten.",
+    "q1": "Welche Schiffsanforderungen gibt es?",
+    "a1": "Jedes Schiff kann einen Beitrag leisten! Entdecker können Asp Explorers oder Anacondas für Langstreckensprünge nutzen, während Miner und Händler näher an etablierten Außenposten operieren können. Selbst ein Sidewinder kann nahegelegene Systeme erkunden.",
+    "q2": "Brauche ich Engineering?",
+    "a2": "Ein entwickelter FSD wird für Tiefraumsektoren empfohlen (50+ LJ Sprungweite), aber viele Ringsegmente sind mit Standard-Schiffen erreichbar. Wir haben Carrier, die Schiffe zu entfernten Sammelpunkten befördern können.",
+    "q3": "Wie melde ich Fortschritte?",
+    "a3": "Nutze die EDSM-Synchronisierungsfunktion oder reiche Systemscans über unseren Discord-Bot ein. Das Kommando verfolgt alle Beiträge und aktualisiert die galaktische Karte in Echtzeit.",
+    "q4": "Gibt es Belohnungen?",
+    "a4": "Obwohl es keine Ingame-Belohnungen von Frontier gibt, führt das Projekt interne Rankings, Abzeichen und Anerkennung für Top-Mitwirkende. Dein Name wird in den Expeditionslogs verzeichnet.",
+    "q5": "Was ist mit Thargoid-Raum?",
+    "a5": "Mehrere geplante Routensegmente führen nahe oder durch thargoid-kontrollierte Regionen. Kampfverbände werden zum Schutz der Kolonisierungsflotten eingesetzt. Überprüfe die Karte gesperrter Regionen, bevor du deinen Kurs legst."
+  },
+  "footer": {
+    "discord": "Discord",
+    "edsm": "EDSM",
+    "inara": "Inara",
+    "forum": "Frontier Forum",
+    "copy": "© 3309 Das Galaxis-Ring-Projekt. Nicht verbunden mit Frontier Developments."
+  }
+}

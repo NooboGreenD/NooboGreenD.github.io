@@ -1,0 +1,157 @@
+{
+  "nav": {
+    "about": "About",
+    "route": "Route",
+    "join": "Join",
+    "faq": "FAQ"
+  },
+  "hero": {
+    "badge": "Elite Dangerous Community Project",
+    "title1": "The Galaxy",
+    "title2": "Ring Project",
+    "subtitle": "A massive colonization initiative to establish a ring of inhabited systems across the Milky Way, connecting the Bubble to the farthest frontiers.",
+    "cta": "Join The Mission"
+  },
+  "stats": {
+    "systems": "Systems",
+    "cmdrs": "CMDRs",
+    "ly": "Light Years",
+    "sectors": "Sectors"
+  },
+  "about": {
+    "title": "Mission Briefing",
+    "subtitle": "The Galaxy Ring Project aims to create a continuous chain of colonized systems forming a ring around the galactic center.",
+    "p1": "Commanders, the Galaxy Ring Project calls upon all explorers, miners, traders, and fighters to participate in one of the most ambitious colonization efforts in human history.",
+    "p2": "Our goal is to establish outposts and settlements in a continuous ring pattern, creating safe corridors through the void and connecting distant regions to the inhabited bubble.",
+    "feature1": "Explore uncharted systems and claim new worlds",
+    "feature2": "Establish mining operations and supply chains",
+    "feature3": "Defend expansion zones from hostile threats",
+    "feature4": "Map optimal routes through dangerous sectors",
+    "feature5": "Document anomalies and scientific discoveries",
+    "vizCaption": "Galactic Ring Colonization Pattern"
+  },
+  "route": {
+    "title": "Expansion Route",
+    "subtitle": "Current progress of the Galaxy Ring expansion across the galactic plane.",
+    "progress": "Progress",
+    "status": {
+      "active": "ACTIVE",
+      "completed": "COMPLETED",
+      "planned": "PLANNED"
+    },
+    "r1": {
+      "name": "Sol → Colonia Corridor",
+      "desc": "Primary expansion spine connecting the Bubble to the Colonia region. 22,000 LY of established outposts."
+    },
+    "r2": {
+      "name": "Colonia → Sagittarius A* Branch",
+      "desc": "Deep core expedition establishing waypoints toward the galactic center."
+    },
+    "r3": {
+      "name": "Eastern Rim Arc",
+      "desc": "Planned expansion along the eastern galactic rim toward the outer arms."
+    },
+    "r4": {
+      "name": "Western Frontier Loop",
+      "desc": "Future initiative to complete the ring through the western frontier sectors."
+    },
+    "r5": {
+      "name": "Perseus Arm Connection",
+      "desc": "Long-term goal to bridge the ring through the Perseus Arm anomalies."
+    },
+    "r6": {
+      "name": "Outer Orion Spur Link",
+      "desc": "Connecting the Perseus bridge to the Outer Orion Spur colonial network."
+    },
+    "r7": {
+      "name": "Formidine Rift Crossing",
+      "desc": "High-risk corridor through the abandoned sectors of the Formidine Rift."
+    },
+    "r8": {
+      "name": "Hawking's Gap Traverse",
+      "desc": "Navigating the dense star fields and nebulae of Hawking's Gap region."
+    },
+    "r9": {
+      "name": "Dryman's Point Supply Line",
+      "desc": "Logistics backbone ensuring supply flow to the eastern frontier outposts."
+    },
+    "r10": {
+      "name": "Sanguineous Rim Outposts",
+      "desc": "Establishing footholds along the blood-red nebulae of the Sanguineous Rim."
+    },
+    "r11": {
+      "name": "Achilles' Altar Approach",
+      "desc": "Tactical expansion toward the militarized sectors near Achilles' Altar."
+    },
+    "r12": {
+      "name": "Xibalba Void Stations",
+      "desc": "Deep-space refueling and repair stations in the sparse Xibalba region."
+    },
+    "r13": {
+      "name": "Kepler's Crest Arc",
+      "desc": "Scientific outpost chain along the mineral-rich Kepler's Crest."
+    },
+    "r14": {
+      "name": "Elysian Shore Colonies",
+      "desc": "Terraforming and settlement initiative on the garden worlds of Elysian Shore."
+    },
+    "r15": {
+      "name": "Temple Sector Network",
+      "desc": "Religious and research outposts in the enigmatic Temple Sector."
+    },
+    "r16": {
+      "name": "Vulcan Gate Defense Line",
+      "desc": "Fortified corridor protecting the western approach from pirate and Thargoid incursions."
+    },
+    "r17": {
+      "name": "Errant Marches Relay",
+      "desc": "Communication and navigation relay chain through the chaotic Errant Marches."
+    },
+    "r18": {
+      "name": "Aquila's Halo Return",
+      "desc": "Final segment closing the ring back toward the Bubble through Aquila's Halo."
+    }
+  },
+  "join": {
+    "title": "Join The Expedition",
+    "subtitle": "Becoming part of the Galaxy Ring Project is simple. Follow these steps to enlist.",
+    "step1": {
+      "title": "Register",
+      "desc": "Join our Discord and register your CMDR name in the project database."
+    },
+    "step2": {
+      "title": "Get Assigned",
+      "desc": "Receive your designated sector and route assignment from command."
+    },
+    "step3": {
+      "title": "Explore",
+      "desc": "Travel to your assigned systems, scan, and prepare for colonization."
+    },
+    "step4": {
+      "title": "Colonize",
+      "desc": "Deploy surface bases, establish supply lines, and claim the void."
+    },
+    "cta": "Enlist Now"
+  },
+  "faq": {
+    "title": "Command Database",
+    "subtitle": "Frequently asked questions from pilots considering joining the expedition.",
+    "q1": "What ship requirements are there?",
+    "a1": "Any ship can contribute! Explorers may use Asp Explorers or Anacondas for long-range jumps, while miners and traders can operate closer to established outposts. Even a Sidewinder can scout nearby systems.",
+    "q2": "Do I need engineering?",
+    "a2": "Engineered FSD is recommended for deep space sectors (50+ LY jump range), but many ring segments are accessible with stock ships. We have carriers that can ferry ships to distant staging points.",
+    "q3": "How do I report progress?",
+    "a3": "Use the EDSM sync feature or submit system scans through our Discord bot. Command tracks all contributions and updates the galactic map in real-time.",
+    "q4": "Are there rewards?",
+    "a4": "While there are no in-game rewards from Frontier, the project maintains internal rankings, badges, and recognition for top contributors. Your name will be recorded in the expedition logs.",
+    "q5": "What about Thargoid space?",
+    "a5": "Several planned route segments pass near or through Thargoid-controlled regions. Combat wings are assigned to protect colonization fleets. Check the locked regions map before plotting your course."
+  },
+  "footer": {
+    "discord": "Discord",
+    "edsm": "EDSM",
+    "inara": "Inara",
+    "forum": "Frontier Forum",
+    "copy": "© 3309 The Galaxy Ring Project. Not affiliated with Frontier Developments."
+  }
+}
