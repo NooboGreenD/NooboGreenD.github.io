@@ -1,6 +1,6 @@
 // ===== NPOINT.IO CONFIG =====
 // Данные сохраняются на сервер — все посетители видят одно и то же
-const NPOINT_URL = 'https://api.npoint.io/424c05a6e4f9ae5d8140';
+const NPOINT_URL = 'https://api.npoint.io/529fc59d07c7ae3a57cc';
 const SERVER_ENABLED = true;
 
 // ===== I18N =====
