@@ -1,9 +1,7 @@
-// ===== JSONBIN.IO CONFIG =====
-// Замените на свои значения после регистрации на https://jsonbin.io
-const JSONBIN_BIN_ID = '6a80b11ef5f4af5e291ac7b3';
-const JSONBIN_READ_KEY = '$2a$10$e1e/z.MYrr8OngoeIsZkrejZvTTvez/JGKLyaIxXcob8plRIZwbOu';
-const JSONBIN_WRITE_KEY = '$2a$10$z1KTZwzRmiRRh6hYfbM3K.bKxFHaG9qnSsqbX6VJFz.x9ZNclCi7y';
-const JSONBIN_ENABLED = JSONBIN_BIN_ID;
+// ===== NPOINT.IO CONFIG =====
+// Данные сохраняются на сервер — все посетители видят одно и то же
+const NPOINT_URL = 'https://api.npoint.io/424c05a6e4f9ae5d8140';
+const SERVER_ENABLED = true;
 
 // ===== I18N =====
 let currentLang = localStorage.getItem('tgrp-lang') || 'en';
@@ -277,42 +275,36 @@ if (cmsSyncRaven) {
     cmsSyncRaven.addEventListener('click', syncRavenColonial);
 }
 
-// ===== JSONBIN.IO LOAD / SAVE =====
+// ===== NPOINT.IO LOAD / SAVE =====
 
-async function loadFromJsonBin() {
-    if (!JSONBIN_ENABLED) return null;
+async function loadFromServer() {
+    if (!SERVER_ENABLED) return null;
     try {
-        const res = await fetch(`https://api.jsonbin.io/v3/b/${JSONBIN_BIN_ID}/latest`, {
-            headers: { 'X-Access-Key': JSONBIN_READ_KEY }
-        });
-        if (!res.ok) throw new Error('JSONBin read failed');
-        const json = await res.json();
-        return json.record || {};
+        const res = await fetch(NPOINT_URL);
+        if (!res.ok) throw new Error('Server read failed');
+        return await res.json();
     } catch (e) {
-        console.error('JSONBin load error:', e);
+        console.error('Server load error:', e);
         return null;
     }
 }
 
-async function saveToJsonBin(data) {
-    if (!JSONBIN_ENABLED) return false;
+async function saveToServer(data) {
+    if (!SERVER_ENABLED) return false;
     try {
-        const res = await fetch(`https://api.jsonbin.io/v3/b/${JSONBIN_BIN_ID}`, {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-Master-Key': JSONBIN_WRITE_KEY
-            },
+        const res = await fetch(NPOINT_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(data)
         });
         return res.ok;
     } catch (e) {
-        console.error('JSONBin save error:', e);
+        console.error('Server save error:', e);
         return false;
     }
 }
 
-// ===== CMS APPLY DATA (shared by local and server) =====
+// ===== CMS APPLY DATA =====
 
 function applyRouteStatus(routeIndex, status) {
     const routeItems = document.querySelectorAll('#route .route-item');
@@ -410,8 +402,8 @@ async function loadCmsData() {
     let data = null;
 
     // 1. Try server first
-    if (JSONBIN_ENABLED) {
-        data = await loadFromJsonBin();
+    if (SERVER_ENABLED) {
+        data = await loadFromServer();
     }
 
     // 2. Fallback to localStorage
@@ -448,14 +440,14 @@ cmsSave.addEventListener('click', async () => {
     // Save to localStorage (always, as fallback)
     localStorage.setItem('tgrp-cms-data', JSON.stringify(data));
 
-    // Save to JSONBin.io
+    // Save to npoint.io
     let serverOk = false;
-    if (JSONBIN_ENABLED) {
-        serverOk = await saveToJsonBin(data);
+    if (SERVER_ENABLED) {
+        serverOk = await saveToServer(data);
     }
 
     // Visual feedback
-    cmsSave.textContent = serverOk ? 'SAVED!' : (JSONBIN_ENABLED ? 'SAVED (local)' : 'SAVED!');
+    cmsSave.textContent = serverOk ? 'SAVED!' : (SERVER_ENABLED ? 'SAVED (local)' : 'SAVED!');
     cmsSave.style.borderColor = 'var(--ed-green)';
     setTimeout(() => {
         cmsSave.textContent = 'Save Changes';
@@ -466,8 +458,8 @@ cmsSave.addEventListener('click', async () => {
 cmsReset.addEventListener('click', async () => {
     if (confirm('Reset all content to default? This cannot be undone.')) {
         localStorage.removeItem('tgrp-cms-data');
-        if (JSONBIN_ENABLED) {
-            await saveToJsonBin({});
+        if (SERVER_ENABLED) {
+            await saveToServer({});
         }
         location.reload();
     }
