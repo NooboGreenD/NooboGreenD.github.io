@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Map of the Galaxy Ring</title>
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <script src="../assets/js/map.js" defer></script>
+</head>
+<body class="map-page">
+    <header class="neon-text">MAP OF THE GALAXY RING</header>
+    
+    <!-- Фон с изображением галактики -->
+    <div class="galaxy-bg"></div>
+
+    <!-- Интерактивная схема кольца -->
+    <div class="ring-container">
+        <img src="../assets/img/galaxy-map.png" alt="Galaxy Map" usemap="#ring-map">
+        <map name="ring-map" id="ring-map"></map>
+    </div>
+
+    <!-- Всплывающее окно для информации о системах -->
+    <div id="popup" class="hidden">
+        <span class="close-btn">&times;</span>
+        <h3 id="system-name"></h3>
+        <p id="system-info"></p>
+    </div>
+</body>
+</html>
